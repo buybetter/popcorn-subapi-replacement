@@ -17,8 +17,8 @@ exports.index = function(req, res){
 	    		imdb_id : resmov.ImdbCode,
 	    		title : resmov.MovieTitle,
 	    		year : resmov.MovieYear,
-	    		runtime : 0,
-	    		synopsis : '' //TODO: fix this later
+	    		runtime : 0, //TODO: fix this later
+	    		synopsis : '', //TODO: fix this later
 	    		vote_average : resmov.MovieRating,
 	    		poster : resmov.CoverImage,
 	    		backdrop : resmov.CoverImage,
