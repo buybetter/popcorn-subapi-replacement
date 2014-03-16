@@ -6,9 +6,9 @@ exports.popular = function(req, res){
 	//TODO handle req.query.page parameter !!!
 	var set = 1;
 	if(req.query.page !== undefined){
-		set = req.query.page
+		params['set'] = req.query.page;
 	}
-	params['set'] = set;
+
 	var url = "http://yts.re/api/list.json";
 
 	getMovies(url, params, function (result) {
@@ -18,6 +18,30 @@ exports.popular = function(req, res){
 		});
 	});
 };
+
+exports.search = function(req, res){
+	console.log(req.query);
+	var params = {};
+	//TODO handle req.query.page parameter !!!
+	var set = 1;
+	if(req.query.page !== undefined){
+		params['set'] = set;
+	}
+
+	if(req.query.query !== undefined){
+		params['query'] = req.query.query;
+	}
+
+	var url = "http://yts.re/api/list.json";
+
+	getMovies(url, params, function (result) {
+
+		proccessMovieList(result,function(movies){
+			res.send(JSON.stringify({movies:movies})); 
+		});
+	});
+};
+
 
 exports.genre = function(req, res){
 	console.log(req.params);
