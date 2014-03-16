@@ -69,7 +69,7 @@ exports.genre = function(req, res){
 
 function getMovies(url,params,callback,error){
 
-
+	params['limit'] = 40;
 	var paramList = [];
 	for(var i in params){
 		paramList.push(i+'='+params[i]);
@@ -102,30 +102,59 @@ function proccessMovieList(result, callback){
 		return callback([]);
 	}
 
+	/*
+		object of movieHash's 
+
+		movieHash['movieName']['720p'] = true;
+	*/
+	var movieHash = {};
+
+
+
     for(var i = 0; i< result.MovieList.length;i++){
     	var resmov = result.MovieList[i];
 
-    	movies.push({
-    		imdb_id : resmov.ImdbCode,
-    		title : resmov.MovieTitle,
-    		year : resmov.MovieYear,
-    		runtime : 0, //TODO: fix this later
-    		synopsis : '', //TODO: fix this later
-    		vote_average : resmov.MovieRating,
-    		poster : resmov.CoverImage,
-    		backdrop : resmov.CoverImage,
-    		seeders : resmov.TorrentSeeds,
-    		leechers : resmov.TorrentPeers,
-    		videos : [{
-    			quality : resmov.Quality,
-    			url : resmov.TorrentUrl
-    		}],
-    		torrents : [{
-    			quality : resmov.Quality,
-    			url : resmov.TorrentUrl
-    		}],
-    		subtitles : []
-    	});
+
+    	if(resmov.movieTitle in movieHash){
+    		//add other quality
+    		var index = 0;
+    		for(var i in movieHash[resmov.movieTitle]){
+    			index = movieHash[resmov.movieTitle][i];
+    		}
+    		if(!(resmov.Quality in movieHash[resmov.movieTitle])){
+    			movies[i].videos.push({
+    				quality : resmov.Quality,
+    				url : resmov.TorrentUrl
+    			});
+    			movieHash[resmov.movieTitle][resmov.Quality] = index;
+    		}
+    	}else{
+    		movieHash[resmov.movieTitle] = {};
+    		
+	    	movies.push({
+	    		imdb_id : resmov.ImdbCode,
+	    		title : resmov.MovieTitle,
+	    		year : resmov.MovieYear,
+	    		runtime : 0, //TODO: fix this later
+	    		synopsis : '', //TODO: fix this later
+	    		vote_average : resmov.MovieRating,
+	    		poster : resmov.CoverImage,
+	    		backdrop : resmov.CoverImage,
+	    		seeders : resmov.TorrentSeeds,
+	    		leechers : resmov.TorrentPeers,
+	    		videos : [{
+	    			quality : resmov.Quality,
+	    			url : resmov.TorrentUrl
+	    		}],
+	    		torrents : [{
+	    			quality : resmov.Quality,
+	    			url : resmov.TorrentUrl
+	    		}],
+	    		subtitles : []
+	    	});
+
+	    	movieHash[resmov.movieTitle][resmov.Quality] = movies.length-1;
+	    }
 
     }
 
