@@ -82,7 +82,7 @@ function getMovies(url,params,callback,error){
 			console.log('error on loading url = ',url);		
 		}
 	}
-
+	console.log('fetching url ',url);
 	request(url, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			callback(JSON.parse(body));
