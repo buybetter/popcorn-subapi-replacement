@@ -120,6 +120,7 @@ function proccessMovieList(result, callback){
     		var index = 0;
     		for(var i in movieHash[resmov.movieTitle]){
     			index = movieHash[resmov.movieTitle][i];
+    			break;
     		}
     		if(!(resmov.Quality in movieHash[resmov.movieTitle])){
     			movies[index].videos.push({
