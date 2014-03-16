@@ -2,7 +2,6 @@ var request = require('request');
 
 exports.index = function(req, res){
 	console.log(req.query);
-	res.send('It is working', 200);
 	var url = "http://yts.re/api/list.json";
 	request(url, function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
@@ -24,7 +23,7 @@ exports.index = function(req, res){
 	    		backdrop : resmov.CoverImage,
 	    		seeders : resmov.TorrentSeeds,
 	    		leechers : resmov.TorrentPeers,
-	    		movies : [{
+	    		videos : [{
 	    			quality : resmov.Quality,
 	    			url : resmov.TorrentUrl
 	    		}],

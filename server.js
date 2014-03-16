@@ -1,12 +1,12 @@
-var express = require('express');
+var express = require('express'),
+	server = express();
 
-var app = express();
-app.use(express.vhost('kemald.com',  require('./app.js').app));
-app.use(express.vhost('supapi-kemald.rhcloud.com',  require('./app.js').app));
+var app = require('./app.js').app;
 
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-console.log(ipaddress);
-var server = app.listen(port,ipaddress, function() {
-    console.log('Listening on port %d', server.address().port); 
+
+server.use(express.vhost('*',  app));
+
+var ret = server.listen(port, function() {
+    console.log('Listening on port %d a', ret.address().port); 
 }); 
