@@ -122,11 +122,11 @@ function proccessMovieList(result, callback){
     			index = movieHash[resmov.movieTitle][i];
     		}
     		if(!(resmov.Quality in movieHash[resmov.movieTitle])){
-    			movies[i].videos.push({
+    			movies[index].videos.push({
     				quality : resmov.Quality,
     				url : resmov.TorrentUrl
     			});
-    			movies[i].torrents.push({
+    			movies[index].torrents.push({
     				quality : resmov.Quality,
     				url : resmov.TorrentUrl
     			});
