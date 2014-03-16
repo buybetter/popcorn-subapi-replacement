@@ -98,6 +98,10 @@ function getMovies(url,params,callback,error){
 function proccessMovieList(result, callback){
 	var movies = [];
 
+	if(result.MovieList === undefined){
+		return callback([]);
+	}
+
     for(var i = 0; i< result.MovieList.length;i++){
     	var resmov = result.MovieList[i];
 
