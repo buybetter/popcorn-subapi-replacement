@@ -126,6 +126,10 @@ function proccessMovieList(result, callback){
     				quality : resmov.Quality,
     				url : resmov.TorrentUrl
     			});
+    			movies[i].torrents.push({
+    				quality : resmov.Quality,
+    				url : resmov.TorrentUrl
+    			});
     			movieHash[resmov.movieTitle][resmov.Quality] = index;
     		}
     	}else{
