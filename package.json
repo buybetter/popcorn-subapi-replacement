@@ -25,5 +25,9 @@
   "license": "BSD",
   "bugs": {
     "url": "https://github.com/cettox/popcorn-subapi-replacement/issues"
+  },
+  "subdomain": "cettox-popcorn-subapi-replacement",
+  "engines": {
+    "node": "0.10.x"
   }
 }
