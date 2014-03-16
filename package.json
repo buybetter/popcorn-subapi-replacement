@@ -5,7 +5,9 @@
     "swig": "latest",
     "request": "2.34.0",
     "cache-quest":"0.2.0",
-    "mongoose" : "3.8.8"
+    "mongoose" : "3.8.8",
+    "underscore" : "1.6.0",
+    "async" : "0.2.10"
   },
   "scripts": {
     "start": "node server.js"
