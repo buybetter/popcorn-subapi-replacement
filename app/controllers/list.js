@@ -113,16 +113,18 @@ function proccessMovieList(result, callback){
 
     for(var i = 0; i< result.MovieList.length;i++){
     	var resmov = result.MovieList[i];
+    	var movieTitle = resmov.MovieTitleClean
 
-
-    	if(resmov.movieTitle in movieHash){
+    	if(movieTitle in movieHash){
     		//add other quality
+    		console.log(movieTitle+" adding another quality");
     		var index = 0;
-    		for(var i in movieHash[resmov.movieTitle]){
-    			index = movieHash[resmov.movieTitle][i];
+    		for(var _movQuality in movieHash[movieTitle]){
+    			index = movieHash[movieTitle][_movQuality];
     			break;
     		}
-    		if(!(resmov.Quality in movieHash[resmov.movieTitle])){
+    		console.log('found movie index ',index);
+    		if(!(resmov.Quality in movieHash[movieTitle])){
     			movies[index].videos.push({
     				quality : resmov.Quality,
     				url : resmov.TorrentUrl
@@ -131,14 +133,14 @@ function proccessMovieList(result, callback){
     				quality : resmov.Quality,
     				url : resmov.TorrentUrl
     			});
-    			movieHash[resmov.movieTitle][resmov.Quality] = index;
+    			movieHash[movieTitle][resmov.Quality] = index;
     		}
     	}else{
-    		movieHash[resmov.movieTitle] = {};
+    		movieHash[movieTitle] = {};
     		
 	    	movies.push({
 	    		imdb_id : resmov.ImdbCode,
-	    		title : resmov.MovieTitle,
+	    		title : movieTitle,
 	    		year : resmov.MovieYear,
 	    		runtime : 0, //TODO: fix this later
 	    		synopsis : '', //TODO: fix this later
@@ -158,7 +160,8 @@ function proccessMovieList(result, callback){
 	    		subtitles : []
 	    	});
 
-	    	movieHash[resmov.movieTitle][resmov.Quality] = movies.length-1;
+	    	movieHash[movieTitle][resmov.Quality] = movies.length-1;
+	    	console.log(movieTitle,' inserting first time, setting index ',movies.length-1);
 	    }
 
     }
