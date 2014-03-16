@@ -2,6 +2,7 @@ var request = require('cache-quest')({expirationTimeout: 10000});
 var movieDetails = require('../models/movieDetails');
 var _ = require('underscore');
 var async = require('async');
+var yifsub = require('../../lib/yifysubtitles');
 
 exports.popular = function(req, res){
 	console.log(req.query);
@@ -119,34 +120,47 @@ function proccessMovieList(result, callback){
     	var movieTitle = resmov.MovieTitleClean
     	movieTitles[resmov.MovieID] = resmov.MovieTitleClean;
 
+    	if(movieHash[movieTitle] === undefined){
 
-    	movies.push({
-    		imdb_id : resmov.ImdbCode,
-    		title : movieTitle,
-    		year : resmov.MovieYear,
-    		runtime : 0, //TODO: fix this later
-    		synopsis : '', //TODO: fix this later
-    		vote_average : resmov.MovieRating,
-    		poster : resmov.CoverImage,
-    		backdrop : resmov.CoverImage,
-    		seeders : resmov.TorrentSeeds,
-    		leechers : resmov.TorrentPeers,
-    		videos : [{
-    			quality : resmov.Quality,
-    			url : resmov.TorrentUrl
-    		}],
-    		torrents : [{
-    			quality : resmov.Quality,
-    			url : resmov.TorrentUrl
-    		}],
-    		subtitles : []
-    	});
+	    	movies.push({
+	    		imdb_id : resmov.ImdbCode,
+	    		title : movieTitle,
+	    		year : resmov.MovieYear,
+	    		runtime : 0, //TODO: fix this later
+	    		synopsis : '', //TODO: fix this later
+	    		vote_average : resmov.MovieRating,
+	    		poster : resmov.CoverImage,
+	    		backdrop : resmov.CoverImage,
+	    		seeders : resmov.TorrentSeeds,
+	    		leechers : resmov.TorrentPeers,
+	    		videos : [{
+	    			quality : resmov.Quality,
+	    			url : resmov.TorrentUrl
+	    		}],
+	    		torrents : [{
+	    			quality : resmov.Quality,
+	    			url : resmov.TorrentUrl
+	    		}],
+	    		subtitles : []
+	    	});
+	    }
+	    movieHash[movieTitle] = true;
     }
 
-    getMovieDetails(movieTitles,function(md){
+    getMovieDetails(movieTitles,function(mds){
     	/*
 			update subtitles list and other list using md object
     	*/
+    	_.each(mds,function(md){
+
+    		var movie = _.find(movies,function(mv){
+    			if(mv.title == md.title){return true;}
+    			return false;
+    		});
+
+    		movie.videos = md.torrents;
+    		movie.torrents = md.torrents;
+    	});
 
     	callback(movies);
     });
@@ -178,8 +192,8 @@ function getMovieDetails(movieTitles,callback){
 			});
 			populateMovieDetails(toBeUpdated);
 		}
-
-		callback();
+		
+		callback(mds);
 	});
 }
 
@@ -198,6 +212,7 @@ function populateMovieDetails(movieTitles){
 				console.log("error on finding movieDetail from mongodb ",title);
 			}
 			if(doc !== null){
+				console.log('movie found, continuing with update');
 				continueUpdate(doc);
 			}else{
 				doc = new movieDetails({
@@ -219,23 +234,28 @@ function populateMovieDetails(movieTitles){
 					var response = JSON.parse(body)
 					
 					var quality = response.Quality;
-
+					console.log('previous torrents ',md.torrents);
+					console.log('new Quality ',quality);
 					//check if a torrent with given quality was registered or not
 					if( _.find(md.torrents,function(_tmp){ if(_tmp.quality == quality)return true; return false } ) === undefined ){
+						console.log('pushing!!!');
 						md.torrents.push({
 							quality : quality,
 							url : response.TorrentUrl
 						});
 					} //new torrent added
 
-					md.save(function (err, product, numberAffected) {
-					  if (err){
-					  	console.log('error on saving movieDetail',md)
-					  }
-					  console.log('movie with title '+title+ ' updated');
-					  cb(); //finish this update operation and move to the next one
+					getSubtitles(response.ImdbCode,function(subs){
+						md.set('subtitles',subs);
+						console.log('found subs ',subs)
+						md.save(function (err, product, numberAffected) {
+						  if (err){
+						  	console.log('error on saving movieDetail')
+						  }
+						  console.log('movie with title '+title+ ' updated');
+						  cb(); //finish this update operation and move to the next one
+						});
 					});
-					
 				}else{
 					console.log('Error on fetching single movie detail ',url);
 				}
@@ -245,4 +265,12 @@ function populateMovieDetails(movieTitles){
 	},function(){
 		console.log('Movie detail update finished for '+movieTitles.length+' items');
 	});
+}
+
+/*
+	fetches subtitle links for given movie id and returnes them
+*/
+function getSubtitles(imdb_id,cb){
+	return cb([]); //currently just return empty list
+	yifsub.findSubtitle(imdb_id,cb);
 }
