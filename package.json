@@ -3,7 +3,8 @@
   "dependencies": {
     "express": "3.x",
     "swig": "latest",
-    "request": "2.34.0"
+    "request": "2.34.0",
+    "cache-quest":"0.2.0"
   },
   "scripts": {
     "start": "node server.js"

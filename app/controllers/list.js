@@ -1,4 +1,5 @@
-var request = require('request');
+var request = require('cache-quest')({expirationTimeout: 10000});
+var CachemanMongo = require('cacheman-mongo');
 
 exports.popular = function(req, res){
 	console.log(req.query);
