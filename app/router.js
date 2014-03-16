@@ -8,6 +8,6 @@ module.exports = function(app) {
 
   var list = require('./controllers/list');   
   app.get('/popular.json',  list.popular);
-  app.get(/^\/(\w+)?\.json$/, list.genre);
+  app.get(/^\/(.*)?\.json$/, list.genre);
 
 };
