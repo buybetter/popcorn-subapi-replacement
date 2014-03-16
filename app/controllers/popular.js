@@ -2,10 +2,14 @@ var request = require('request');
 
 exports.index = function(req, res){
 	console.log(req.query);
-	var url = "http://yts.re/api/list.json";
+	//TODO handle req.query.page parameter !!!
+	var set = 1;
+	if(req.query.page !== undefined){
+		set = req.query.page
+	}
+	var url = "http://yts.re/api/list.json?set="+set;
 	request(url, function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
-	    console.log(body) // Print the google web page.
 	    var result = JSON.parse(body);
 	    var movies = [];
 
