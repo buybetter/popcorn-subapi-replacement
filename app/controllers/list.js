@@ -74,6 +74,7 @@ exports.genre = function(req, res){
 function getMovies(url,params,callback,error){
 
 	params['limit'] = 40;
+	params['sort'] = 'seeds';
 	var paramList = [];
 	for(var i in params){
 		paramList.push(i+'='+params[i]);
