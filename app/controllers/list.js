@@ -24,7 +24,7 @@ exports.popular = function(req, res){
 };
 
 exports.search = function(req, res){
-	console.log(req.query);
+	console.log(req.query, 'searching');
 	var params = {};
 	//TODO handle req.query.page parameter !!!
 	var set = 1;
@@ -33,7 +33,7 @@ exports.search = function(req, res){
 	}
 
 	if(req.query.query !== undefined){
-		params['query'] = req.query.query;
+		params['keywords'] = req.query.query;
 	}
 
 	var url = "http://yts.re/api/list.json";
@@ -174,7 +174,7 @@ function getMovieDetails(movieTitles,callback){
 		if(err){
 			console.log('erro on finding movieDetails documents');
 		}
-		console.log('found movieDetails ',mds);
+
 		var incomingTitles = _.pluck(mds,'title');
 
 		var diff = _.difference(titles,incomingTitles);
