@@ -123,7 +123,7 @@ function proccessMovieList(result, callback){
     	if(movieHash[movieTitle] === undefined){
 
 	    	movies.push({
-	    		imdb_id : resmov.ImdbCode,
+	    		imdb_id : resmov.ImdbCode.split('tt').join(''),
 	    		title : movieTitle,
 	    		year : resmov.MovieYear,
 	    		runtime : 0, //TODO: fix this later
