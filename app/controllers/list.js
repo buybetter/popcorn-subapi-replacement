@@ -20,6 +20,8 @@ exports.popular = function(req, res){
 		proccessMovieList(result,function(movies){
 			res.send(JSON.stringify({movies:movies})); 
 		});
+	},function(err){
+		console.log('error on fetching movies')
 	});
 };
 
@@ -71,8 +73,12 @@ exports.genre = function(req, res){
 	});
 };
 
-function getMovies(url,params,callback,error){
-
+function getMovies(url,params,callback,err){
+	if(err === undefined){
+		err = function(){
+			console.log('error on fetching movies');
+		}
+	}
 	params['limit'] = 40;
 	params['sort'] = 'seeds';
 	var paramList = [];
@@ -92,7 +98,7 @@ function getMovies(url,params,callback,error){
 		if (!error && response.statusCode == 200) {
 			callback(JSON.parse(body));
 		}else{
-			error();
+			err(error);
 		}
 	});
 }
