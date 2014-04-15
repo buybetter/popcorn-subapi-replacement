@@ -88,11 +88,6 @@ function getMovies(url,params,callback,err){
 
 	url = url +'?'+ paramList.join('&');
 	
-	if(error === undefined){
-		error = function(){
-			console.log('error on loading url = ',url);		
-		}
-	}
 	console.log('fetching url ',url);
 	request(url, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
