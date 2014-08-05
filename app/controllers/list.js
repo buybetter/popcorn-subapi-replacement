@@ -13,7 +13,7 @@ exports.popular = function(req, res){
 		params['set'] = req.query.page;
 	}
 
-	var url = "http://yts.re/api/list.json";
+	var url = "http://veocine.hol.es/list.json";
 
 	getMovies(url, params, function (result) {
 
@@ -38,7 +38,7 @@ exports.search = function(req, res){
 		params['keywords'] = req.query.query;
 	}
 
-	var url = "http://yts.re/api/list.json";
+	var url = "http://veocine.hol.es/list.json";
 
 	getMovies(url, params, function (result) {
 
@@ -63,7 +63,7 @@ exports.genre = function(req, res){
 	}
 
 	params['set'] = set;
-	var url = "http://yts.re/api/list.json";
+	var url = "http://veocine.hol.es/list.json";
 
 	getMovies(url, params, function (result) {
 
