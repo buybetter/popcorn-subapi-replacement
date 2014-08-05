@@ -79,8 +79,7 @@ function getMovies(url,params,callback,err){
 			console.log('error on fetching movies');
 		}
 	}
-	params['limit'] = 40;
-	params['sort'] = 'seeds';
+	
 	var paramList = [];
 	for(var i in params){
 		paramList.push(i+'='+params[i]);
